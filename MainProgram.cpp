@@ -194,81 +194,94 @@ int MyString::count(char ch) const {
 // ---- Function Overloading: append ----
 // These four functions demonstrate FUNCTION OVERLOADING:
 // Same name "append", different parameter types.
-
+// ---- Function Overloading: append ----
+ 
 MyString MyString::append(const MyString& other) const {
-    // TODO: Append another MyString to this one and return the result
+    return MyString(data + other.data);
 }
-
+ 
 MyString MyString::append(const char* cstr) const {
-    // TODO: Append a C-string to this one and return the result
+    return MyString(data + string(cstr));
 }
-
+ 
 MyString MyString::append(char ch) const {
-    // TODO: Append a single character and return the result
+    return MyString(data + ch);
 }
-
+ 
 MyString MyString::append(int number) const {
-    // TODO: Append the string representation of an integer and return the result
-    // Hint: Use std::to_string()
+    return MyString(data + to_string(number));
 }
-
+ 
 // ---- Function Overloading: replace ----
-// These two functions demonstrate FUNCTION OVERLOADING:
-// Same name "replace", different parameter types.
-
+ 
 MyString MyString::replace(char oldCh, char newCh) const {
-    // TODO: Replace ALL occurrences of oldCh with newCh, return new MyString
+    string result = data;
+    for (char& c : result) {
+        if (c == oldCh) c = newCh;
+    }
+    return MyString(result);
 }
-
+ 
 MyString MyString::replace(const string& oldStr, const string& newStr) const {
-    // TODO: Replace ALL occurrences of oldStr with newStr, return new MyString
-    // WARNING: Be careful not to create an infinite loop!
-    //          After each replacement, advance position past the new string.
+    string result = data;
+    size_t pos = 0;
+    while ((pos = result.find(oldStr, pos)) != string::npos) {
+        result.replace(pos, oldStr.length(), newStr);
+        pos += newStr.length();
+    }
+    return MyString(result);
 }
-
+ 
 // ---- Operator Overloading ----
-
+ 
 MyString MyString::operator+(const MyString& other) const {
-    // TODO: Concatenate two MyString objects and return the result
+    return MyString(data + other.data);
 }
-
+ 
 bool MyString::operator==(const MyString& other) const {
-    // TODO: Return true if both MyString objects hold the same string
+    return data == other.data;
 }
-
+ 
 bool MyString::operator!=(const MyString& other) const {
-    // TODO: Return true if the two MyString objects hold different strings
+    return data != other.data;
 }
-
+ 
 bool MyString::operator<(const MyString& other) const {
-    // TODO: Lexicographic less-than comparison
+    return data < other.data;
 }
-
+ 
 bool MyString::operator>(const MyString& other) const {
-    // TODO: Lexicographic greater-than comparison
+    return data > other.data;
 }
-
+ 
 char MyString::operator[](int index) const {
-    // TODO: Return character at index
-    // Throw std::out_of_range if index is invalid (negative or >= length)
+    if (index < 0 || index >= static_cast<int>(data.length())) {
+        throw out_of_range("Index out of range in operator[]");
+    }
+    return data[index];
 }
-
+ 
 MyString MyString::operator*(int times) const {
-    // TODO: Repeat the string 'times' times and return the result
-    // If times <= 0, return empty string
+    if (times <= 0) return MyString("");
+    string result;
+    for (int i = 0; i < times; i++) {
+        result += data;
+    }
+    return MyString(result);
 }
-
+ 
 // ---- Stream Overloading ----
-
+ 
 ostream& operator<<(ostream& os, const MyString& s) {
-    // TODO: Output the MyString's data to the stream
-    // Return the stream to allow chaining: cout << a << b;
+    os << s.data;
+    return os;
+}
+ 
+istream& operator>>(istream& is, MyString& s) {
+    is >> s.data;
+    return is;
 }
 
-istream& operator>>(istream& is, MyString& s) {
-    // TODO: Read a single word from the stream into the MyString
-    // Return the stream to allow chaining: cin >> a >> b;
-}
 
 // ================================
 // MAIN FUNCTION
