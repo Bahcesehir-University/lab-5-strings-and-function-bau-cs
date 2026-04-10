@@ -158,12 +158,19 @@ MyString MyString::trim() const {
     // TODO: Return a NEW MyString with leading and trailing whitespace removed
     // Whitespace includes: space, tab (\t), newline (\n), carriage return (\r)
     // Hint: Use find_first_not_of and find_last_not_of
+    size_t start = data.find_first_not_of(" \t\n\r");
+    if (start == string::npos) return MyString("");
+    size_t end = data.find_last_not_of(" \t\n\r");
+    return MyString(data.substr(start, end - start +1));
     
 }
 
 MyString MyString::reverse() const {
     // TODO: Return a NEW MyString with characters in reverse order
     // Hint: Use std::reverse on a copy
+    string result = data;
+    std::reverse(result.begin(), result.end());
+    return MyString(result);
 }
 
 // ---- Search Operations ----
@@ -171,10 +178,17 @@ MyString MyString::reverse() const {
 int MyString::find(const MyString& target) const {
     // TODO: Return index of first occurrence of target, or -1 if not found
     // Hint: Use std::string::find, check against string::npos
+    size_t pos = data.find(target.data);
+    return (pos == string::npos) ? -1 : pos;
 }
 
 int MyString::count(char ch) const {
     // TODO: Return the number of occurrences of character ch in the string
+    int cnt = 0;
+    for(char c : data){
+        if (c == ch) cnt++;
+    }
+    return cnt;
 }
 
 // ---- Function Overloading: append ----
