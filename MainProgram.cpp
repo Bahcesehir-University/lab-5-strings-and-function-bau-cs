@@ -84,37 +84,50 @@ public:
 
 MyString::MyString() {
     // TODO: Initialize with empty string
+     data = "";
 }
 
 MyString::MyString(const string& str) {
     // TODO: Initialize data with the given std::string
+    data = str;
 }
 
 MyString::MyString(const char* str) {
     // TODO: Initialize data with the given C-string
+    data = str;
 }
 
 // ---- Getter ----
 
 string MyString::getData() const {
     // TODO: Return the internal string data
+    return data;
 }
 
 // ---- Basic String Operations ----
 
 int MyString::length() const {
     // TODO: Return the length of the string
+    return data.length();
 }
 
 char MyString::charAt(int index) const {
     // TODO: Return character at given index
     // Throw std::out_of_range if index is invalid (negative or >= length)
+    if (index<0 || index >= static_cast<int>(data.length())){
+        throw std::out_of_range("index is invalid");
+    }
+    return data[index];
 }
 
 MyString MyString::substring(int start, int len) const {
     // TODO: Return a substring starting at 'start' with length 'len'
     // Throw std::out_of_range if start is invalid (negative or >= length)
     // Hint: Use std::string::substr()
+    if (start<0 || start >= static_cast<int>(data.length())){
+        throw std::out_of_range("index is invalid");
+    }
+    return MyString(data.substr(start , len));
 }
 
 // ---- String Manipulation ----
@@ -123,18 +136,29 @@ MyString MyString::toUpperCase() const {
     // TODO: Return a NEW MyString with all characters converted to upper case
     // Hint: Use std::transform with ::toupper
     // Do NOT modify the original object
+    string result = data;
+    transform(result.begin(), result.end(), result.begin(),
+       [](unsigned char c) {return toupper(c);});
+       
+    return MyString(result) ;  
 }
 
 MyString MyString::toLowerCase() const {
     // TODO: Return a NEW MyString with all characters converted to lower case
     // Hint: Use std::transform with ::tolower
     // Do NOT modify the original object
+    string result = data;
+    transform(result.begin(), result.end(), result.begin(),
+       [](unsigned char c) {return tolower(c);});
+       
+    return MyString(result) ;  
 }
 
 MyString MyString::trim() const {
     // TODO: Return a NEW MyString with leading and trailing whitespace removed
     // Whitespace includes: space, tab (\t), newline (\n), carriage return (\r)
     // Hint: Use find_first_not_of and find_last_not_of
+    
 }
 
 MyString MyString::reverse() const {
